@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,8 +11,14 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
+
+Route::post( 'register', [AuthController::class, 'register'] );
+Route::post( 'login', [AuthController::class, 'login'] );
+
+Route::group( ['middleware' => 'auth:jwt'], function () {
+    Route::get( 'user', [UserController::class, 'getUser'] );
+} );
